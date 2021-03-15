@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 
 import comm.TCPConnection;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.*;
@@ -27,7 +29,7 @@ public class GameController implements OnMessageListener {
 	public void init() {
 		connection = TCPConnection.getInstance();
 		connection.setListenerOfMessages(this);
-
+		view.init();
 		int fil = (int) (3 * Math.random());
 		int col = (int) (3 * Math.random());
 		view.drawWeakPointInRadar(fil, col);
@@ -79,6 +81,12 @@ public class GameController implements OnMessageListener {
 								alert.setHeaderText("Has perdido el juego");
 								alert.setContentText("Tu oponente te ha ganado!");
 								alert.showAndWait();
+								init();
+							} else {
+								int a = messag.getCells()[0];
+								int b = messag.getCells()[1];
+								view.getRadar()[a][b].setStyle("-fx-background-color: red;");
+
 							}
 
 						} else {
@@ -90,6 +98,7 @@ public class GameController implements OnMessageListener {
 								alert.setHeaderText("Has ganado el juego");
 								alert.setContentText("Le has ganado a tu oponente!");
 								alert.showAndWait();
+								init();
 
 							}
 						}

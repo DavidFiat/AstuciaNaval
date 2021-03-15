@@ -3,10 +3,12 @@ package view;
 import java.io.IOException;
 
 import control.GameController;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class GameWindow extends Stage {
@@ -20,6 +22,12 @@ public class GameWindow extends Stage {
 	private Button sendNameBtn;
 	private Label opponentLabel;
 	private Label statusLabel;
+	@FXML
+	private AnchorPane anchorPane;
+
+	public AnchorPane getAnchorPane() {
+		return anchorPane;
+	}
 
 	private int[] weakPoint;
 	private int[] attackPoint;
@@ -64,6 +72,7 @@ public class GameWindow extends Stage {
 			statusLabel = (Label) loader.getNamespace().get("statusLabel");
 			weakPoint = new int[2];
 			attackPoint = new int[2];
+			anchorPane = new AnchorPane();
 
 			contol = new GameController(this);
 		} catch (IOException e) {
@@ -124,5 +133,13 @@ public class GameWindow extends Stage {
 	public void setStatusLabel(String label) {
 		opponentLabel.setText(label);
 
+	}
+
+	public void init() {
+		for (int i = 0; i < radar.length; i++) {
+			for (int i2 = 0; i2 < radar[i].length; i2++) {
+				radar[i][i2].setStyle("-fx-background-color: blue;");
+			}
+		}
 	}
 }

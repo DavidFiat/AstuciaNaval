@@ -3,12 +3,15 @@ package control;
 import comm.Receptor.OnMessageListener;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.Gson;
 
 import comm.TCPConnection;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.Attack;
@@ -29,7 +32,7 @@ public class GameController implements OnMessageListener {
 	public void init() {
 		connection = TCPConnection.getInstance();
 		connection.setListenerOfMessages(this);
-
+		view.init();
 		int fil = (int) (3 * Math.random());
 		int col = (int) (3 * Math.random());
 		view.drawWeakPointInRadar(fil, col);
@@ -38,6 +41,7 @@ public class GameController implements OnMessageListener {
 			Gson gson = new Gson();
 			String json = gson.toJson(new Name("Name", view.getNameTF().getText()));
 			TCPConnection.getInstance().getEmisor().sendMessage(json);
+
 		});
 
 		for (int i = 0; i < view.getAtaque().length; i++) {
@@ -80,6 +84,11 @@ public class GameController implements OnMessageListener {
 								alert.setHeaderText("Has perdido el juego");
 								alert.setContentText("Tu oponente te ha ganado!");
 								alert.showAndWait();
+								init();
+							} else {
+								int a = messag.getCells()[0];
+								int b = messag.getCells()[1];
+								view.getRadar()[a][b].setStyle("-fx-background-color: red;");
 							}
 
 						} else {
@@ -91,6 +100,7 @@ public class GameController implements OnMessageListener {
 								alert.setHeaderText("Has ganado el juego");
 								alert.setContentText("Le has ganado a tu oponente!");
 								alert.showAndWait();
+								init();
 
 							}
 						}
